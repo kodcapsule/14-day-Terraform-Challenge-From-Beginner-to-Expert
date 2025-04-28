@@ -1,0 +1,12 @@
+Linkin Post.txt
+terraform-course-readme.md
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+*.tfstate.backup
+
+*.tfplan
+*.tfplan.*
+
+Readme.md
