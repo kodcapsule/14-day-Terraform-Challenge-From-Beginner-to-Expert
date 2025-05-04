@@ -13,7 +13,7 @@
 - [Day 9: Terraform Provisioners and Connections](#day-9-terraform-provisioners-and-connections)
 - [Day 10: Terraform Import and Resource Adoption](#day-10-terraform-import-and-resource-adoption)
 - [Day 11: Testing and Validation](#day-11-testing-and-validation)
-- [Day 12: CI/CD for Terraform](#day-12-cicd-for-terraform)
+- [Day 12: CI/CD for TerraformCI/CD for Terraform](#day-12-cicd-for-terraform)
 - [Day 13: Advanced State Management and Collaboration](#day-13-advanced-state-management-and-collaboration)
 - [Day 14: Advanced Terraform Patterns and Best Practices](#day-14-advanced-terraform-patterns-and-best-practices)
 - [Final Project](#final-project-comprehensive-infrastructure-platform)
@@ -21,7 +21,7 @@
 
 ## Course Overview
 
-Infrastructure as Code (IaC) has changed how organisations today design, create, and manage cloud infrastructure.
+Infrastructure as Code (IaC),  has revolutionalized how organisations today design, create, and manage cloud infrastructure.
 Terraform, HashiCorp's powerful open-source platform for defining and provisioning infrastructure using declarative configuration files, is at the forefront of this transformation. This 14-Day Terraform Journey is designed to take you from absolute newbie to confident expert, with the ability to develop enterprise-level infrastructure solutions.
 
 
