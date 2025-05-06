@@ -30,26 +30,27 @@ Infrastructure as Code (IaC),  is an  approach  to managing and provisioning inf
    other benefits include, speed and safty, and  easy documentation 
 
 ### Declarative vs Imperative Approaches
-     Understanding the difference between specifying "what" you want (declarative) versus "how" to create it (imperative).
-     With declarative code  you  declare the end state that you  want and the tool will take all the necessory steps to get to the desired state.
+  Understanding the difference between specifying "what" you want (declarative) versus "how" to create it (imperative). With declarative code  you  declare the end state that you  want and the tool will take all the necessory steps to get to the desired state.
 
 
 ### IaC Tools Landscape
-**Configuration management tools (Chef, Puppet, Ansible):** As configuration management tools, Chef, Puppet, and Ansible are designed to install and maintain software on servers. 
-**Provisioning tools (Terraform, CloudFormation,  Pulumi ):**    These tools are reponsible for creating infrastructure resources(Servers, databases, caches, load balancers,)
-**Ad hoc scripts  (e.g., Bash, Ruby, Python):** Ad hoc scripts work well for short-term, one-time tasks, but if you plan to manage your entire infrastructure as code, it is best to  utilise an IaC tool designed specifically for that purpose.
-**Server templating tools:(Docker, Packer,  Vagrant.)** Server templating tools are great for creating VMs and containers. 
-**Orchestration tools:(Kubernetes,Marathon/Mesos,Docker Swarm,  Nomad)**:
+- **Configuration management tools (Chef, Puppet, Ansible):** As configuration management tools, Chef, Puppet, and Ansible are designed to install and maintain software on servers. 
+- **Provisioning tools (Terraform, CloudFormation,  Pulumi ):**    These tools are reponsible for creating infrastructure resources(Servers, databases, caches, load balancers,)
+- **Ad hoc scripts  (e.g., Bash, Ruby, Python):** Ad hoc scripts work well for short-term, one-time tasks, but if you plan to manage your entire infrastructure as code, it is best to  utilise an IaC tool designed specifically for that purpose.
+- **Server templating tools:(Docker, Packer,  Vagrant.)** Server templating tools are great for creating VMs and containers. 
+- **Orchestration tools:(Kubernetes,Marathon/Mesos,Docker Swarm,  Nomad)**:
  
 
 ### What is  Terraform?
 Terraform, an open-source tool developed by  HashiCorp and   the most popular and widely used IaC tool by  DevOps, SREs and cloud architects. Terraform is widely used because of it's declarative syntax, platform agnostic and its simplicity.
-### How Terraform compares to other IaC solutions
+
+
 
 ## Terraform Architecture and Workflow
 Terraform follows a well-defined architecture and workflow that enables its powerful infrastructure management capabilities.
-
+**Duration: 25 minutes**
 ### Terraform Architecture
+
 ![Terraform Architecture](./images/Terraform-Arch.gif)
 Terraform follows a standard architecture to fulfill the necessary IaC tasks. Terraform architecture mainly consists of the following components:
 - 1  Terraform core
@@ -76,48 +77,35 @@ Terraform ability is  enhance  by plugins, which enable terraform  to interact w
  - 2. Remote State: Remote State refers to storing the Terraform state file (terraform.tfstate) in a remote backend rather than locally on your machine. This enables collaboration, prevents state loss, and supports features like state locking and versioning. Some common remote backends include AWS S3,Terraform Cloud, Azure Blob Storage etc. [Remote State](https://developer.hashicorp.com/terraform/language/state/remote)
 
 ### Terraform Workflow
+Terraform follows a structured execution flow to provision, update, and manage infrastructure. This process ensures that infrastructure is deployed in a controlled and predictable manner. Terraform workflow consist of mainly five steps:
 
-**Duration: 25 minutes**
-
-
-
-**Architecture Components**:
-- **Terraform Core**: Processes configuration files and maintains state
-- **Providers**: Plugins that interact with APIs of various services (AWS, Azure, GCP, etc.)
-- **State Management**: How Terraform tracks resources and their relationships
-- **Configuration Files**: Written in HCL (HashiCorp Configuration Language)
-
-**Terraform Workflow**:
-- **Write**: Create infrastructure definition in HCL
-- **Plan**: Preview changes before applying
-- **Apply**: Create or modify infrastructure
+- **Write/Define Infrastructure**: The first step is to write your terraform configuration code using HashiCorp Configuration Language (HCL) just like any other software code. 
+- **Initialize**:Downloads the required plugins and set up the Terraform working directory.Terraform's init command is typically used to achieve this.
+- **Plan**: This is the step where you review your configurations. Terraform  plan will define the infrastructure be created, modified, or destroyed depending on the current configuration and infrastructure.
+- **Apply**: The final step in the workflow is Apply,  where you are ready to provision real infrastructure. Once your approve of the changes ,terraform will go ahead  perform the desired actions as defined in defined execution order
 - **Destroy**: Remove infrastructure when no longer needed
 
-**Core Concepts**:
+### Terraform Core Concepts
 - **Resources**: Infrastructure objects managed by Terraform
 - **Data Sources**: Information queried from providers
 - **Providers**: Plugins for interfacing with different platforms
 - **Modules**: Reusable configuration components
 
 ## Installing Terraform
-**Duration: 20 minutes**
-
-Setting up Terraform properly is crucial for a smooth development experience.
+**Duration: 30 minutes**
 
 **Installation Methods**:
+Setting up Terraform properly is crucial for a smooth development experience. You can install Terraform using two methods, Manual Installation using  binaries or using Package Managers.
 - **Manual Installation**:
   - Downloading binaries from HashiCorp website
-  - Setting up PATH environment variable
+  - Set up PATH environment variable
+  - Verify terraform is properly installed `terraform version`
 - **Package Managers**:
-  - Installation via apt, yum, brew, chocolatey, etc.
-  - Benefits of package manager-based installation
-- **Terraform Version Manager (tfenv)**:
-  - Managing multiple Terraform versions
-  - Switching between versions for different projects
+  - Installation via apt, yum, brew, chocolatey, etc.  
+  - Verify terraform is properly installed `terraform version`
+To learn more about installing and setting up terraform visit the official [Install Terraform](https://developer.hashicorp.com/terraform/install). 
 
-**Verifying Installation**:
-- Running `terraform version`
-- Understanding version output
+**NOTE** You can manage terraform versions using **Terraform Version Manager (tfenv)** [Manage Terraform versions](https://developer.hashicorp.com/terraform/tutorials/configuration-language/versions).  
 
 **IDE Integration**:
 - VSCode with Terraform extension
@@ -126,8 +114,7 @@ Setting up Terraform properly is crucial for a smooth development experience.
 
 ## Basic Terraform Commands
 **Duration: 30 minutes**
-
-Terraform offers a rich CLI with various commands for managing infrastructure.
+Terraform offers a rich CLI with various commands for managing your infrastructure.This section introduces some everyday commnds
 
 **Core Commands**:
 - **`terraform init`**: Initializes a working directory, downloads providers
@@ -156,6 +143,17 @@ Terraform offers a rich CLI with various commands for managing infrastructure.
 HashiCorp Configuration Language (HCL) is Terraform's domain-specific language designed for creating structured configuration files.
 
 **Basic Syntax Elements**:
+```hcl
+resource "aws_vpc" "main" {
+  cidr_block = var.base_cidr_block
+}
+
+<BLOCK TYPE> "<BLOCK LABEL>" "<BLOCK LABEL>" {
+  # Block body
+  <IDENTIFIER> = <EXPRESSION> # Argument
+}
+```
+
 - **Blocks**: Container for other content (resource, provider, variable, etc.)
   ```hcl
   resource "aws_instance" "example" {
@@ -271,18 +269,18 @@ output "bucket_arn" {
 ```
 
 **Completion Checklist**:
-- [ ] Terraform installed and verified
-- [ ] Provider configured with appropriate credentials
-- [ ] Configuration file created with at least one resource
-- [ ] Successfully initialized Terraform environment
-- [ ] Generated and reviewed execution plan
-- [ ] Applied configuration and verified resource creation
-- [ ] Reviewed state file contents
-- [ ] Successfully destroyed resources
-- [ ] Shared progress using the LinkedIn post template
+✅ Terraform installed and verified
+✅ Provider configured with appropriate credentials
+✅ Configuration file created with at least one resource
+✅ Successfully initialized Terraform environment
+✅ Generated and reviewed execution plan
+✅ Applied configuration and verified resource creation
+✅ Reviewed state file contents
+✅ Successfully destroyed resources
 
-By the end of Day 1, you'll have a solid understanding of 
-Terraform fundamentals and have successfully created and managed your first infrastructure resource using code!
+
+
+
 
 
 
