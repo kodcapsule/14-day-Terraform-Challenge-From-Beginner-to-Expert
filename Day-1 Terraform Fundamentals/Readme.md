@@ -1,4 +1,4 @@
-# 14-Day Terraform Journey/Challenge From Beginner to Expert: Day-1 Terraform Fundamentals
+# 14-Day Terraform Challenge From Beginner to Expert: Day-1 Terraform Fundamentals
 
 
 ## Day 1: Terraform Fundamentals
@@ -16,7 +16,10 @@
 ## Introduction to Infrastructure as Code (IaC)
 **Duration: 30 minutes**
 ### What is infrastructure as code (IaC)?
-The concept of infrastructure as code (IaC), states that you can define, deploy, update, and destroy your infrastructure by writing and running code.  This signifies a significant change in perspective where all operational components, including  hardware,  configuring actual servers are viewed as software. This represents a paradigm shift in how we manage and provision infrastructure. Instead of manually configuring resources through console interfaces or ad-hoc scripts, IaC allows you to define infrastructure using code, bringing software development practices to infrastructure management.
+
+Infrastructure as Code (IaC),  is an  approach  to managing and provisioning infrastructure by writing  code instead of manual the processes, "ClickOps". IaC can be described as  the  mindset where you treat all  aspects of operations (servers, databases, networks) as software.Instead of manually configuring resources through console interfaces or ad-hoc scripts, IaC allows you to define infrastructure using code, bringing software development practices to infrastructure management. When you  define your  infrastructure using code , it   enables you to  automate and use all the best practices of software development. IaC eliminates human errors , speeds up infrastructure deployments  and ensures infrastructure is version-controlled, just like software code. 
+
+ 
 
 ### What are the benefits of using IaC
   - **Consistency**: Eliminates configuration drift and ensures consistent environments
@@ -24,26 +27,59 @@ The concept of infrastructure as code (IaC), states that you can define, deploy,
   - **Scalability**: Efficiently scale infrastructure by replicating configurations
   - **Version Control**: Track changes, rollback when needed, and understand the evolution of your infrastructure
   - **Documentation**: The code itself serves as documentation for your infrastructure
+   other benefits include, speed and safty, and  easy documentation 
+
 ### Declarative vs Imperative Approaches
-     Understanding the difference between specifying "what" you want (declarative) versus "how" to create it (imperative)
+     Understanding the difference between specifying "what" you want (declarative) versus "how" to create it (imperative).
+     With declarative code  you  declare the end state that you  want and the tool will take all the necessory steps to get to the desired state.
 
 
 ### IaC Tools Landscape
 **Configuration management tools (Chef, Puppet, Ansible):** As configuration management tools, Chef, Puppet, and Ansible are designed to install and maintain software on servers. 
-**Provisioning tools (Terraform, CloudFormation, ARM Templates):**    
+**Provisioning tools (Terraform, CloudFormation,  Pulumi ):**    These tools are reponsible for creating infrastructure resources(Servers, databases, caches, load balancers,)
 **Ad hoc scripts  (e.g., Bash, Ruby, Python):** Ad hoc scripts work well for short-term, one-time tasks, but if you plan to manage your entire infrastructure as code, it is best to  utilise an IaC tool designed specifically for that purpose.
 **Server templating tools:(Docker, Packer,  Vagrant.)** Server templating tools are great for creating VMs and containers. 
-**Orchestration tools:(Kubernetes,Marathon/Mesos,Docker Swarm,  Nomad)**
+**Orchestration tools:(Kubernetes,Marathon/Mesos,Docker Swarm,  Nomad)**:
  
 
-### Why Terraform
-
+### What is  Terraform?
+Terraform, an open-source tool developed by  HashiCorp and   the most popular and widely used IaC tool by  DevOps, SREs and cloud architects. Terraform is widely used because of it's declarative syntax, platform agnostic and its simplicity.
 ### How Terraform compares to other IaC solutions
 
 ## Terraform Architecture and Workflow
+Terraform follows a well-defined architecture and workflow that enables its powerful infrastructure management capabilities.
+
+### Terraform Architecture
+![Terraform Architecture](./images/Terraform-Arch.gif)
+Terraform follows a standard architecture to fulfill the necessary IaC tasks. Terraform architecture mainly consists of the following components:
+- 1  Terraform core
+- 2  Plugins (Providers and Provisioners) 
+- 3  Terraform State
+
+####  1. Terraform core
+Terraform core is the engine/brain behind how terraform works. It is responsible for  reading configurations files ,  building the dependency graphs from resources and data sources, managing state and applying changes. Terraform Core does not directly interact with cloud providers but communicates with plugins via remote procedure calls (RPCs) and the plugins in turn communicates with their corresponding platforms via HTTPs.  
+
+
+#### 2. Plugins (Providers and Provisioners)
+
+Terraform ability is  enhance  by plugins, which enable terraform  to interact with cloud services and configure resources dynamically. Plugins acts as connectors or the glue between terraform and external APIs such as AWS, Azure, GCP, Kubernetes, Docker etc. Each plugin is written in the  Go programming language and implements a specific interface. Terraform core knows how to install and execute  plugins. Provisioners in Terraform are used to execute scripts or commands on a resource after it has been created or modified. 
+
+
+#### 3. Terraform State 
+ State is one of the most important core components of Terraform. Terraform state is a record about all the infrastructure and resources  it created. It is a customed  JSON file that terraform uses to  map real world resources to your configuration, keep track of metadata, and to improve performance for large infrastructures. By  default, state is stored  in a local file named "terraform.tfstate". You can read more about terraform state [here](https://developer.hashicorp.com/terraform/language/state)
+ 
+ There are two ways to manage state:
+ - 1. Local State:  Local State refers to the default way by which Terraform stores state files (terraform.tfstate).  It is suitable for small-scale projects or development environments and single person is managing Terraform. 
+
+
+ 
+ - 2. Remote State: Remote State refers to storing the Terraform state file (terraform.tfstate) in a remote backend rather than locally on your machine. This enables collaboration, prevents state loss, and supports features like state locking and versioning. Some common remote backends include AWS S3,Terraform Cloud, Azure Blob Storage etc. [Remote State](https://developer.hashicorp.com/terraform/language/state/remote)
+
+### Terraform Workflow
+
 **Duration: 25 minutes**
 
-Terraform follows a well-defined architecture and workflow that enables its powerful infrastructure management capabilities.
+
 
 **Architecture Components**:
 - **Terraform Core**: Processes configuration files and maintains state
