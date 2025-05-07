@@ -10,7 +10,7 @@
 - Installing Terraform
 - Basic Terraform commands
 - HCL syntax fundamentals
-- Creating your first Terraform configuration
+- Project: "Hello, Infrastructure!"
  
 
 ## Introduction to Infrastructure as Code (IaC)
@@ -141,39 +141,42 @@ Terraform offers a rich CLI with various commands for managing your infrastructu
 **Duration: 35 minutes**
 
 HashiCorp Configuration Language (HCL) is Terraform's domain-specific language designed for creating structured configuration files.
+The Terraform language syntax is built around two key syntax constructs: arguments and blocks
 
-**Basic Syntax Elements**:
 ```hcl
-resource "aws_vpc" "main" {
-  cidr_block = var.base_cidr_block
-}
-
 <BLOCK TYPE> "<BLOCK LABEL>" "<BLOCK LABEL>" {
   # Block body
   <IDENTIFIER> = <EXPRESSION> # Argument
 }
 ```
 
-- **Blocks**: Container for other content (resource, provider, variable, etc.)
-  ```hcl
-  resource "aws_instance" "example" {
-    ami           = "ami-0c55b159cbfafe1f0"
-    instance_type = "t2.micro"
-  }
-  ```
-- **Arguments**: Assign values to names
-  ```hcl
-  name = "value"
-  ```
-- **Expressions**: Used to reference or compute values
+- **1. Blocks**: A block  acts as a containers  for other content. Some types of blocks are:
+  - 1 resource, 
+  - 2. provider,
+  - 3. variable,
+  - 4. output,
+  - 5. data.
+- **2. Arguments**: Assign values to names
+
+
+BLOCK TYPE:
+BLOCK LABEL:
+IDENTIFIER:
+EXPRESSION:
+
+ - **Expressions**: Used to reference or compute values
   ```hcl
   count = var.instance_count
   ```
 
-**Data Types**:
-- **Primitive Types**: String, number, boolean
-- **Complex Types**: List/tuple, map/object
-- **Type Constraints**: How to specify expected types
+**Examples**: 
+ ```hcl
+    resource "aws_instance" "webserver" {
+    ami           = "ami-0c55b159cbfafe1f0"
+    instance_type = "t2.micro"
+  }
+  ```
+
 
 **Special Syntax**:
 - **Comments**: Single-line (`#`, `//`) and multi-line (`/* */`)
@@ -181,49 +184,11 @@ resource "aws_vpc" "main" {
 - **Interpolation**: Using `${}` to embed expressions in strings
 - **Conditional Expressions**: Using the ternary operator `condition ? true_val : false_val`
 
-## Creating Your First Terraform Configuration
-**Duration: 40 minutes**
-
-This hands-on section helps solidify the concepts through practical application.
-
-**Project Structure**:
 - **Best Practices for File Organization**:
   - Using `.tf` extension
   - Common file names (main.tf, variables.tf, outputs.tf)
   - Organizing code for readability
 
-**Creating a Basic Configuration**:
-- **Provider Configuration**:
-  ```hcl
-  provider "aws" {
-    region = "us-west-2"
-  }
-  ```
-- **Resource Definition**:
-  ```hcl
-  resource "aws_s3_bucket" "example" {
-    bucket = "my-first-terraform-bucket"
-    acl    = "private"
-    
-    tags = {
-      Name        = "My First Terraform Bucket"
-      Environment = "Dev"
-    }
-  }
-  ```
-
-**Applying the Configuration**:
-- Running `terraform init`
-- Running `terraform plan`
-- Understanding the plan output
-- Running `terraform apply`
-- Verifying the created resources
-
-**Common Errors and Troubleshooting**:
-- Provider initialization issues
-- Syntax errors
-- Authentication problems
-- Resource dependency issues
 
 ## Project: "Hello, Infrastructure!"
 
@@ -236,47 +201,9 @@ For this project, you'll create a simple Terraform configuration that provisions
 5. Verify the resource was created successfully
 6. Destroy the resources when finished
 
-**Example S3 Bucket Configuration**:
-```hcl
-# Configure the AWS Provider
-provider "aws" {
-  region = "us-east-1"
-}
 
-# Create an S3 bucket
-resource "aws_s3_bucket" "my_first_bucket" {
-  bucket = "my-first-terraform-bucket-unique-name"
-  
-  tags = {
-    Name        = "My First Terraform Bucket"
-    Environment = "Development"
-    Project     = "Terraform Learning"
-    Day         = "1"
-  }
-}
 
-# Output the bucket name
-output "bucket_name" {
-  value       = aws_s3_bucket.my_first_bucket.bucket
-  description = "The name of the S3 bucket"
-}
 
-# Output the bucket ARN
-output "bucket_arn" {
-  value       = aws_s3_bucket.my_first_bucket.arn
-  description = "The ARN of the S3 bucket"
-}
-```
-
-**Completion Checklist**:
-✅ Terraform installed and verified
-✅ Provider configured with appropriate credentials
-✅ Configuration file created with at least one resource
-✅ Successfully initialized Terraform environment
-✅ Generated and reviewed execution plan
-✅ Applied configuration and verified resource creation
-✅ Reviewed state file contents
-✅ Successfully destroyed resources
 
 
 

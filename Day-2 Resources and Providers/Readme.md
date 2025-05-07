@@ -1,4 +1,4 @@
-# 14-Day Terraform Journey/Challenge From Beginner to Expert:  Day-2 Resources and Providers
+# 14-Day Terraform Challenge From Beginner to Expert:  Day-2 Resources and Providers
 
 
 **Estimated Time**: 3.5 hours
