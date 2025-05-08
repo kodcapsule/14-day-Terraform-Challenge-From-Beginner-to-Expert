@@ -4,32 +4,59 @@
 **Estimated Time**: 3.5 hours
 
 ## Topics:
-- Understanding Terraform providers
-- Resource blocks and syntax
-- Provider configuration
-- Multiple resource creation
-- Resource dependencies
-- Resource attributes and references
+- 1. What are Providers in Terraform 
+- 2. Understanding Resources , Resource blocks and syntax
+- 3. Multiple resource creation
+- 4. Resource dependencies
+- 5. Resource attributes and references
+- 6. Project: "Multi-Resource Deployment
 
-### Project: "Multi-Resource Deployment"
-1. Create a configuration with multiple related resources (e.g., VPC, subnets, and security groups)
-2. Use resource attributes to establish dependencies
-3. Implement explicit dependencies using `depends_on`
-4. Apply and test your configuration
 
-## Understanding Terraform Providers
 
-Providers are Terraform's connection to external APIs and services. They act as plugins that allow Terraform to manage resources in various platforms like AWS, Azure, GCP, and many others.
+## 1 Understanding Terraform Providers
+When you install terraform fresh you cannot use it to do much, a fresh installation of terraform just gives you the terraform core binaries. To interact with cloud providers, SaaS providers, and other APIs terraform uses plugins(extentions). In a nutshell Providers  act as  plugins that enables terraform to manage resources in various platforms like AWS, Azure, GCP, and many others. Without providers, Terraform can't manage any kind of infrastructure.
 
-**Key Points:**
-- Providers are responsible for understanding API interactions and exposing resources
-- Each provider offers a set of resource types and data sources
+
+**Key Points on Providers:**
+- Providers are responsible for the  API interactions between terraform and  various platforms(cloud providers, SaaS providers, and other APIs)
+- Each provider has its own documentation, describing its resource types and their arguments.
 - The Terraform Registry (registry.terraform.io) is the main source for providers
+- Providers are released separately from Terraform itself and have their own version numbers.
 - Providers need to be declared and configured before use
-- Common providers include AWS, Azure, GCP, GitHub, Kubernetes, and HashiCorp products
+- Providers are written in Go, using the Terraform Plugin SDK.
+- Common providers include AWS, Azure, GCP, GitHub, Kubernetes etc
+
+
+
+### Provider Configuration
+To uses providers you need to configure them before. Provider configuration specifies the settings that are needed to interact with the target API.
+The  various configurations options are listed bellow:  
+
+**Configuration Options:**
+- 1.Authentication mechanisms (access keys, tokens, certificates)
+- Endpoint URLs
+- Default region or location
+- Proxy settings and custom headers
+- Rate limiting and retry behavior
+
+**Provider Authentication Methods:**
+1. Static credentials in configuration (not recommended for production)
+2. Environment variables
+3. Shared credential files (e.g., ~/.aws/credentials)
+4. Instance profiles or service accounts
+5. Identity federation
+
+A provider configuration is created using a provider block as shown bellow 
+
+```bash
+provider "aws" {
+  region = "us-west-2"
+}
+```
+The name in the above provider block "aws" is the local provider name to configure. This provider should already be included in a required_providers block in the terraform configuration block. The body "{}" contains all the configuration options for the provider.
 
 **Example of provider declaration:**
-```hcl
+```bash
 terraform {
   required_providers {
     aws = {
@@ -44,12 +71,18 @@ provider "aws" {
 }
 ```
 
-## Resource Blocks and Syntax
+  
 
-Resources are the primary element in Terraform. Each resource block describes one or more infrastructure objects like virtual networks, compute instances, or DNS records.
+
+
+
+## 2. Understanding Resources , Resource blocks and syntax
+
+Resources are the main building blocks/elements  in Terraform.  Resource block describes one or more infrastructure objects like virtual networks, compute instances, or DNS records. A resource block declares a resource of a specific type with a specific local name. Terraform uses the name when referring to the resource in the same module, but it has no meaning outside that module's scope.
 
 **Resource Block Syntax:**
-```hcl
+
+```bash
 resource "provider_type" "resource_name" {
   attribute1 = value1
   attribute2 = value2
@@ -57,64 +90,19 @@ resource "provider_type" "resource_name" {
   nested_block {
     nested_attribute = value
   }
-
-  dynamic "dynamic_block" {
-    for_each = some_collection
-    content {
-      attribute = dynamic_block.value
-    }
-  }
-}
-```
-
-**Key Components:**
-- `provider_type`: The type of resource, determined by the provider (e.g., aws_instance)
-- `resource_name`: A user-defined name for the resource, used as an identifier in Terraform
-- Attributes: Configuration settings specific to the resource type
-- Nested blocks: Structured configuration for complex resource properties
-- Dynamic blocks: Generate repeated nested blocks based on collections
-
-## Provider Configuration
-
-Provider configuration specifies the settings needed to interact with the target API.
-
-**Configuration Options:**
-- Authentication mechanisms (access keys, tokens, certificates)
-- Endpoint URLs
-- Default region or location
-- Proxy settings and custom headers
-- Rate limiting and retry behavior
-
-**Provider Authentication Methods:**
-1. Static credentials in configuration (not recommended for production)
-2. Environment variables
-3. Shared credential files (e.g., ~/.aws/credentials)
-4. Instance profiles or service accounts
-5. Identity federation
-
-**Example of AWS provider with authentication:**
-```hcl
-provider "aws" {
-  region     = "us-east-1"
-  profile    = "production"
-  max_retries = 5
   
-  assume_role {
-    role_arn = "arn:aws:iam::123456789012:role/TerraformRole"
-  }
-
-  default_tags {
-    tags = {
-      Environment = "Production"
-      ManagedBy   = "Terraform"
-    }
-  }
 }
 ```
+**Key Components of a Resource Block:**
+- 1. `provider_type`: The type of resource, determined by the provider (e.g., aws_instance)
+- 2. `resource_name`: A user-defined name for the resource, used as an identifier in Terraform
+- 3. Attributes: Configuration settings specific to the resource type
+- 5. Nested blocks: Structured configuration for complex resource properties
+
 
 ## Multiple Resource Creation
 
-Terraform configurations typically include multiple related resources to define complete infrastructure environments.
+In Terraform configurations,  typically there are  multiple related resources that come together to define a complete infrastructure environment.
 
 **Best Practices:**
 - Group related resources into logical modules
@@ -124,7 +112,7 @@ Terraform configurations typically include multiple related resources to define 
 - Use variables to make configurations reusable
 
 **Example of multiple related resources:**
-```hcl
+```bash
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
   
@@ -260,258 +248,6 @@ resource "aws_route53_record" "www" {
 
 ### 1. Create Configuration with Multiple Related Resources
 
-```hcl
-# Multi-Resource Deployment Configuration
-
-# Configure AWS Provider
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 4.16"
-    }
-  }
-  required_version = ">= 1.2.0"
-}
-
-provider "aws" {
-  region = var.aws_region
-}
-
-# Define variables
-variable "aws_region" {
-  description = "AWS region to deploy resources"
-  default     = "us-west-2"
-}
-
-variable "vpc_cidr" {
-  description = "CIDR block for VPC"
-  default     = "10.0.0.0/16"
-}
-
-variable "environment" {
-  description = "Deployment environment"
-  default     = "dev"
-}
-
-# VPC Resource
-resource "aws_vpc" "main" {
-  cidr_block           = var.vpc_cidr
-  enable_dns_hostnames = true
-  enable_dns_support   = true
-  
-  tags = {
-    Name        = "${var.environment}-vpc"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
-}
-
-# Internet Gateway for VPC
-resource "aws_internet_gateway" "main" {
-  vpc_id = aws_vpc.main.id
-  
-  tags = {
-    Name        = "${var.environment}-igw"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
-}
-
-# Public Subnet
-resource "aws_subnet" "public" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = cidrsubnet(var.vpc_cidr, 8, 1)
-  availability_zone       = "${var.aws_region}a"
-  map_public_ip_on_launch = true
-  
-  tags = {
-    Name        = "${var.environment}-public-subnet"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
-}
-
-# Private Subnet
-resource "aws_subnet" "private" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = cidrsubnet(var.vpc_cidr, 8, 2)
-  availability_zone = "${var.aws_region}b"
-  
-  tags = {
-    Name        = "${var.environment}-private-subnet"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
-}
-
-# Route Table for Public Subnet
-resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.main.id
-  
-  tags = {
-    Name        = "${var.environment}-public-rt"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
-}
-
-# Route to Internet Gateway
-resource "aws_route" "public_internet_gateway" {
-  route_table_id         = aws_route_table.public.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.main.id
-}
-
-# Route Table Association with Public Subnet
-resource "aws_route_table_association" "public" {
-  subnet_id      = aws_subnet.public.id
-  route_table_id = aws_route_table.public.id
-}
-
-# Security Group for Web Servers
-resource "aws_security_group" "web" {
-  name        = "${var.environment}-web-sg"
-  description = "Security group for web servers"
-  vpc_id      = aws_vpc.main.id
-  
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow HTTP traffic"
-  }
-  
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow HTTPS traffic"
-  }
-  
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow SSH access"
-  }
-  
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow all outbound traffic"
-  }
-  
-  tags = {
-    Name        = "${var.environment}-web-sg"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
-}
-
-# Security Group for Database
-resource "aws_security_group" "db" {
-  name        = "${var.environment}-db-sg"
-  description = "Security group for database instances"
-  vpc_id      = aws_vpc.main.id
-  
-  ingress {
-    from_port       = 3306
-    to_port         = 3306
-    protocol        = "tcp"
-    security_groups = [aws_security_group.web.id]
-    description     = "Allow MySQL traffic from web servers"
-  }
-  
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow all outbound traffic"
-  }
-  
-  tags = {
-    Name        = "${var.environment}-db-sg"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
-}
-
-# EC2 Instance in Public Subnet
-resource "aws_instance" "web" {
-  ami                    = "ami-0c55b159cbfafe1f0"  # Amazon Linux 2 AMI (adjust for your region)
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.public.id
-  vpc_security_group_ids = [aws_security_group.web.id]
-  
-  # Example of user data for a web server
-  user_data = <<-EOF
-              #!/bin/bash
-              yum update -y
-              yum install -y httpd
-              systemctl start httpd
-              systemctl enable httpd
-              echo "<h1>Hello from Terraform</h1>" > /var/www/html/index.html
-              EOF
-  
-  tags = {
-    Name        = "${var.environment}-web-server"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
-  
-  # Explicit dependency - wait for route table association
-  depends_on = [aws_route_table_association.public]
-}
-
-# Elastic IP for Web Server
-resource "aws_eip" "web" {
-  vpc = true
-  
-  tags = {
-    Name        = "${var.environment}-web-eip"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
-  
-  # Explicitly depend on Internet Gateway
-  depends_on = [aws_internet_gateway.main]
-}
-
-# EIP Association
-resource "aws_eip_association" "web" {
-  instance_id   = aws_instance.web.id
-  allocation_id = aws_eip.web.id
-}
-
-# Outputs
-output "vpc_id" {
-  description = "ID of the VPC"
-  value       = aws_vpc.main.id
-}
-
-output "public_subnet_id" {
-  description = "ID of the public subnet"
-  value       = aws_subnet.public.id
-}
-
-output "private_subnet_id" {
-  description = "ID of the private subnet"
-  value       = aws_subnet.private.id
-}
-
-output "web_server_public_ip" {
-  description = "Public IP address of the web server"
-  value       = aws_eip.web.public_ip
-}
-```
-
 ### 2. Using Resource Attributes to Establish Dependencies
 
 In the configuration above, I've established multiple implicit dependencies through resource attributes:
@@ -581,3 +317,8 @@ This project demonstrates key Terraform concepts:
 - Output values for important resource attributes
 - Tagging resources for better organization
 - Variable usage for flexibility
+
+
+# Referrences 
+1. https://developer.hashicorp.com/terraform/language/providers
+2. https://developer.hashicorp.com/terraform/language/providers/configuration
