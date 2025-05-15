@@ -3,11 +3,10 @@
 
 ## Table of Contents
 - [Terraform Workspaces ](#Terraform-Workspaces)
-- [Module Structure and Organization](#Module-Structure-and-Organization)
-- [Local and remote modules](#Local-and-remote-modules)
-- [Module inputs and outputs](#Module-inputs-and-outputs)
-- [Module versioning](#Module-versioning)
-- [ Module composition](#Module-composition)
+- [Environment Management Strategies](#Environment-Management-Strategies)
+- [Managing Multiple Environments](#Managing-Multiple-Environments)
+- [File Structure for Multi Environment Setups](#File-Structure-for-Multi-Environment-Setups)
+- [Environment-Specific Configurations](#Environment-Specific-Configurations)
 - [Project  ](#Project)
 - [Conclusion](#Conclusion)
 - [References](#References)
@@ -59,7 +58,10 @@ terraform workspace delete dev
 
 ### Limitations of Workspaces
 
-- **State storage**: All state files are stored in the same backend location (just with different keys)
+Terraform workspaces are an effective way to quickly spin up and tear down different versions of your code, but they have some limitations:
+
+- **State storage**: All state files are stored in the same backend location (e.g., the same S3 bucket). Because of this, you are using the same authentication and access rules across all of the workspaces, which is one of the main reasons workspaces are not a good way to isolate environments (e.g., staging from production).
+
 - **Configuration sharing**: All workspaces share the same configuration files
 - **Backend configuration**: Backend configuration is shared across workspaces
 - **Workspace management**: Can become unwieldy for complex setups with many environments
@@ -73,8 +75,17 @@ Workspaces are best suited for:
 - Testing temporary changes without affecting the primary infrastructure
 - Teams with straightforward workflow requirements
 
-## 🧩 2. Environment Management Strategies
-
+##  Environment Management Strategies
+Even though workspaces are good for managing multiple states files 
 ### 1. Workspace-based Strategy
 
 ### 2. Directory-Based Structure
+
+## Managing Multiple Environments
+
+## File Structure for Multi Environment Setups 
+
+## Environment-Specific Configurations
+## Project
+## Conclusion
+## References
