@@ -14,9 +14,6 @@
 
 
 ## Introduction
-- What are Terraform Functions and Expressions
-- Why They Matter for Infrastructure as Code
-
 Terraform is a powerful IaC tool because of its declarative nature, but in declarative languages, certain types of tasks, like repeating a piece of logic(for-loops) or conditional logic (if-statements), are usually required. How can you conditionally configure resources, for example, by building a Terraform module that can provide specific resources for some users but not for others, if declarative languages do not support if-statements?
 
 The good news is that Terraform has several primitives that let you perform specific kinds of loops, if-statements, and other operations, including the meta parameter count, for_each and for expressions, a ternary operator, a lifecycle block called create_before_destroy, and other built-in functions.
@@ -65,7 +62,8 @@ HashiCorp Configuration Language (HCL), expressions gives you the ability to ref
 
 ## Built-in Functions
 Terraform , like AWS CloudFormation, includes many built-in functions that can be used to do common operations within expressions, such as transforming and combining values. The basic syntax for function calls is a function name followed by comma-separated arguments in brackets. 
- <SYNTAX> '\FUNCTION NAME> (<ARGUMENTS>)'
+ <SYNTAX>
+ `<FUNCTION NAME> (<ARGUMENTS>)`
 
  Example:
  ```bash 
@@ -144,15 +142,9 @@ locals {
 }
 ```
 
-
-
-
 ## Conditional Expressions
-- Ternary Operator
-- Conditional Resource Creation
 
-
-## Conditional Expressions
+A conditional expression always uses a boolean value  expression to select one of two values.
 
 Conditional expressions enable you to make resource creation and configuration decisions based on conditions:
 
@@ -185,7 +177,8 @@ resource "aws_elasticache_cluster" "redis" {
 
 
 ## References
-https://docs.aws.amazon.com/prescriptive-guidance/latest/getting-started-terraform/functions-expressions.html
-https://developer.hashicorp.com/terraform/language/expressions/types
-https://developer.hashicorp.com/terraform/language/expressions
-https://developer.hashicorp.com/terraform/language/functions
+1. https://docs.aws.amazon.com/prescriptive-guidance/latest/getting-started-terraform/functions-expressions.html
+2. https://developer.hashicorp.com/terraform/language/expressions/types
+3. https://developer.hashicorp.com/terraform/language/expressions
+4. https://developer.hashicorp.com/terraform/language/functions
+ 
